@@ -1,11 +1,14 @@
 package main
 
 import (
+	"flag"
 	"io"
 	"log"
 	"net"
 	"time"
 )
+
+var socketFilePath string
 
 func reader(r io.Reader) {
 	buf := make([]byte, 1024)
@@ -19,7 +22,10 @@ func reader(r io.Reader) {
 }
 
 func main() {
-	c, err := net.Dial("unix", "/tmp/echo.sock")
+	flag.StringVar(&socketFilePath, "socketfile", "/tmp/domainsocketexample.sock", "file path of domain socket")
+	flag.Parse()
+
+	c, err := net.Dial("unix", socketFilePath)
 	if err != nil {
 		panic(err)
 	}
